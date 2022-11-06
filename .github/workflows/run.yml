@@ -1,0 +1,33 @@
+name: Update README
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches:
+      - main
+
+env:
+  GITHUB_NAME: yanggangtony
+  GITHUB_EMAIL: gang.yang@daocloud.io
+  STARED_NUMBER: 10
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: My GitHub Status
+        uses: yihong0618/github-readme-stats@v2.0
+        # with:
+        #   WITH_STARED: false
+        #   TELEGRAM_TOKEN: ${{ secrets.TELE_TOKEN }}
+        #   TELEGRAM_CHAT_ID: ${{ secrets.TELE_CHAT_ID }}
+      - name: Push README
+        run: |
+          git config --local user.email "${{ env.GITHUB_EMAIL }}"
+          git config --local user.name "${{ env.GITHUB_NAME }}"
+          git commit -a -m 'docs: update readme.md'
+          git push
